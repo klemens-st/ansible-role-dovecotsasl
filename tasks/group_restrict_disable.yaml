@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Ensure a group for smtp users is absent.
+  ansible.builtin.group:
+    name: "{{ dovecotsasl_smtp_group }}"
+    state: absent
+- name: Ensure login is enabled for all groups.
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/dovecot
+    regexp: '^auth required '
+    state: absent

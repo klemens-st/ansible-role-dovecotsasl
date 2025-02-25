@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT
+---
+galaxy_info:
+  author: klemens-st
+  role_name: dovecotsasl
+  description: SASL authentication for Postfix on Debian/Ubuntu.
+
+  license: license (MIT)
+
+  min_ansible_version: '2.1'
+
+  galaxy_tags:
+    - postfix
+    - sasl
+    - authentication
+    - dovecot

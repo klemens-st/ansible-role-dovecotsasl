@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: MIT
+---
+# Need to make sure Cyrus sasl is uninstalled.
+- name: Ensure saslauthd is removed.
+  ansible.builtin.apt:
+    name: sasl2-bin
+    state: absent
+
+- name: Ensure dovecot is installed.
+  ansible.builtin.apt:
+    name: dovecot-core
+    state: present
+
+- name: Configure Dovecot for SASL authentication.
+  ansible.builtin.copy:
+    src: "dovecot/{{ item }}"
+    dest: "/etc/dovecot/conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+    validate: 'doveconf %s'
+  loop:
+    - 11-auth-local.conf
+    - 11-master-local.conf
+  notify: restart dovecot
+
+- ansible.builtin.import_tasks: group_restrict.yaml
+  when: dovecotsasl_group_restrict
+
+- ansible.builtin.import_tasks: group_restrict_disable.yaml
+  when: not dovecotsasl_group_restrict
+
+- ansible.builtin.import_tasks: postfix_config.yaml
+  when: dovecotsasl_postfix_config_enabled
+
+- ansible.builtin.import_tasks: postfix_config_disable.yaml
+  when: not dovecotsasl_postfix_config_enabled
+
+- name: Configure Dovecot service.
+  ansible.builtin.service:
+    name: dovecot
+    state: "{{ dovecotsasl_service_state }}"
+    enabled: "{{ dovecotsasl_service_enabled }}"

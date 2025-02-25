@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Ensure a group for smtp users exists.
+  ansible.builtin.group:
+    name: "{{ dovecotsasl_smtp_group }}"
+    state: present
+- name: Ensure SASL login is enabled for selected unix group only.
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/dovecot
+    regexp: '^auth required '
+    line: "auth required pam_succeed_if.so user ingroup {{ dovecotsasl_smtp_group }}"

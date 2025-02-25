@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Configure Postfix to use Dovecot SASL.
+  ansible.builtin.blockinfile:
+    path: /etc/postfix/main.cf
+    marker: "# {mark} ANSIBLE ROLE DOVECOTSASL MANAGED BLOCK"
+    block: |
+      smtpd_sasl_type = dovecot
+      smtpd_sasl_path = private/auth
+      smtpd_sasl_auth_enable = yes
+      broken_sasl_auth_clients = yes
+      smtpd_tls_auth_only = yes
+    append_newline: true
+    prepend_newline: true
+    state: present
+    validate: 'postconf %s'
+  notify: restart postfix

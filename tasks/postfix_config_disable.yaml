@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Ensure Postfix configurateion to use Dovecot SASL is absent.
+  ansible.builtin.blockinfile:
+    path: /etc/postfix/main.cf
+    marker: "# {mark} ANSIBLE ROLE DOVECOTSASL MANAGED BLOCK"
+    state: absent
+    validate: 'postconf %s'
+  notify: restart postfix
