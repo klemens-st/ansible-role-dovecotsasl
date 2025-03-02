@@ -28,7 +28,7 @@ If `dovecotsasl_group_restrict` is `true`, only users that are members of the `d
 ```yaml
 dovecotsasl_postfix_config_enabled: true
 ```
-Whether to actually enable SASL authentication by configuring Postfix to use Dovecot. If set to `false` you need to manage the Postfix configuration yourself.
+Whether to actually enable SASL authentication by configuring Postfix to use Dovecot. If set to `false` you need to manage the Postfix configuration yourself. If `true`, make sure subsequent roles/tasks/etc. do not overwrite `main.cf`. If they do, the configuration managed by this role will be lost.
 ```yaml
 dovecotsasl_service_state: started
 dovecotsasl_service_enabled: true
